@@ -2,7 +2,7 @@ const express    = require('express')
 const app        = express()
 const bodyParser = require('body-parser')
 const md5        = require('md5')
-
+const SecretsController = require('./lib/controllers/secrets-controller')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -16,14 +16,7 @@ app.get('/', (request, response) => {
   response.send(app.locals.title)
 })
 
-app.get('/api/secrets/:id', (request, response) => {
-  const id      = request.params.id
-  const message = app.locals.secrets[id]
-
-  if (!message) { return response.sendStatus(404) }
-
-  response.json({ id, message })
-})
+app.get('/api/secrets/:id', SecretsController.show)
 
 app.post('/api/secrets', (request, response) => {
   const message = request.body.message
